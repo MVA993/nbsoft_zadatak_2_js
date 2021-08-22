@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" href="">
+    <style>
+        .invalid {
+            border-color: red;
+            color: red;
+        }
+
+        .invalid::placeholder {
+            color: red;
+        }
+
+        .succesfull-message {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <form id="user-form" name="user-form">
+            <div class="form-group row">
+                <div class="col-md-3 col">
+                    <label for="exampleInputName">Ime</label>
+                </div>
+                <div class="col-md-9 col">
+                    <input type="text" class="form-control" name="name" id="name" aria-describedby="emailHelp"
+                        placeholder="Unesite ime">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <label for="exampleInputSurname">Prezime</label>
+                </div>
+                <div class="col-md-9">
+                    <input type="text" class="form-control" name="surname" id="surname" aria-describedby="emailHelp"
+                        placeholder="Unesite prezime">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-3 col">
+                    <label for="gender">Pol</label>
+                </div>
+                <div class="col-md-9 col" id=gender>
+                    <div class="form-check">
+                        <input class="form-check-input" name="gender[male]" id="gender-male" type="checkbox">
+                        <label class="form-check-label" for="gender[male]">
+                            Muški
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" name="gender[female]" id="gender-female" type="checkbox">
+                        <label class="form-check-label" for="gender[female]">
+                            Ženski
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <label>
+                        Godina rodjenja:
+                    </label>
+                </div>
+                <div class="col-md-9">
+                    <select class="form-select" name="year" id="year" aria-label="Default select example">
+                        <option selected disabled></option>
+                        <option value="1990">1990</option>
+                        <option value="1991">1991</option>
+                        <option value="1992">1992</option>
+                        <option value="1993">1993</option>
+                        <option value="1994">1994</option>
+                        <option value="1995">1995</option>
+                        <option value="1996">1996</option>
+                        <option value="1997">1997</option>
+                        <option value="1998">1998</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    Izaberite grad:
+                </div>
+                <div class="col-md-9">
+                    <select class="form-select" name="city" id="city" aria-label="Default select example">
+                        <option selected disabled></option>
+                        <option value="Novi Sad">Novi Sad</option>
+                        <option value="Niš">Niš</option>
+                        <option value="Beograd">Beograd</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-3">
+                    <label for="exampleFormControlTextarea1">Adresa</label>
+                </div>
+                <div class="col-md-9">
+                    <textarea class="form-control" name="address" id="address" rows="3"></textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <div class="succesfull-message">
+            <div>
+                <h1>Forma uspešno prijavljena</h1>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+    <script>
+        function ensureOnlyOneGenderIsSelected() {
+            const male = $('#gender-male');
+            const female = $('#gender-female');
+
+            male.on('change', function () {
+                female.prop('checked', false);
+            });
+
+            female.on('change', function () {
+                male.prop('checked', false);
+            });
+        }
+
+        $(document).ready(function () {
+            ensureOnlyOneGenderIsSelected();
+
+            function notEmpty(element) {
+                return element.val().length > 0;
+            }
+
+            function hasMinLength(element, minLenght) {
+                console.log(element.val().length);
+                return element.val().length >= minLenght;
+            }
+
+            function hasNumber(element) {
+                return /\d/.test(element.val());
+            }
+
+            function validateName() {
+                const name = $('#name');
+
+                if (!notEmpty(name) || !hasMinLength(name, 3) || hasNumber(name)) {
+                    name.addClass('invalid');
+
+                    return false;
+                }
+
+                if (name.hasClass('invalid')) {
+                    name.removeClass('invalid');
+                }
+
+                return true;
+            }
+
+            function validateSurname() {
+                const surname = $('#surname');
+
+                if (!notEmpty(surname) || !hasMinLength(surname, 3) || hasNumber(surname)) {
+                    surname.addClass('invalid');
+
+                    return false;
+                }
+
+                if (surname.hasClass('invalid')) {
+                    surname.removeClass('invalid');
+                }
+
+                return true;
+            }
+
+            function validateAddress() {
+                const address = $('#address');
+
+                if (!notEmpty(address) || !hasMinLength(address, 3)) {
+                    address.addClass('invalid');
+
+                    return false;
+                }
+
+                if (address.hasClass('invalid')) {
+                    address.removeClass('invalid');
+                }
+
+                return true;
+            }
+
+            function validateGender() {
+                const gender = $('#gender');
+                const male = $('#gender-male');
+                const female = $('#gender-female');
+
+                if (!male.attr('checked') && !female.attr('checked')) {
+                    gender.addClass('invalid');
+
+                    return false;
+                }
+
+                if (gender.hasClass('invalid')) {
+                    gender.removeClass('invalid');
+                }
+
+                return true;
+            }
+
+            function validateCity() {
+                const city = $('#city');
+
+                if (!city.val() === '' || city.val() === null) {
+                    city.addClass('invalid');
+
+                    return false;
+                }
+
+                if (city.hasClass('invalid')) {
+                    city.removeClass('invalid');
+                }
+
+                return true;
+            }
+
+            function validateYear() {
+                const year = $('#year');
+
+                if (!year.val() === '' || year.val() === null) {
+                    year.addClass('invalid');
+
+                    return false;
+                }
+
+                if (year.hasClass('invalid')) {
+                    year.removeClass('invalid');
+                }
+
+                return true;
+            }
+
+
+            $("#user-form").on("submit", function (event) {
+                event.preventDefault();
+                const form = $(this);
+
+                validateName();
+                validateSurname();
+                validateGender();
+                validateCity();
+                validateAddress();
+                validateYear();
+
+
+                if ($('.invalid').length === 0) {
+                    console.log(form.serialize());
+                    const url = 'http://localhost/NBSOFT/Zadatak%202/saved_data.php';
+
+                    $.post(url, form.serialize())
+                        .done(function (data) {
+                            response = JSON.parse(data);
+                            form.hide();
+                            const succesfulBox = $('.succesfull-message');
+
+                            succesfulBox.append(
+                                "<div>" +
+                                "Ime: " + response.name + "<br />" +
+                                "Prezime: " + response.surname + "<br />" +
+                                "Pol: " + response.gender + "<br />" +
+                                "Godina: " + response.year + "<br />" +
+                                "Grad: " + response.city + "<br />" +
+                                "Adresa: " + response.address + "<br />" +
+
+                                "</div>"
+                            );
+                            succesfulBox.show();
+                        });
+                }
+
+                // const fileds = $(this).serialize();
+
+            })
+        })
+    </script>
+</body>
+
+</html>
